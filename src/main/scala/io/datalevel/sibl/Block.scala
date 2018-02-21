@@ -4,7 +4,13 @@ import java.time.Instant
 import java.security.MessageDigest
 
 case class Block(timestamp: Instant, data: String, prevBlockHash: Array[Byte], hash: Array[Byte]) {
-  override def toString = s"timestamp: ${timestamp.toString}\ndata: $data\nprevBlockHash: ${prevBlockHash.asHexString}\nhash: ${hash.asHexString}"
+  override def toString = {
+    val timeStr     = timestamp.toString
+    val hashStr     = hash.asHexString
+    val prevHashStr = prevBlockHash.asHexString
+
+    s"timestamp: $timeStr\ndata: $data\nprevBlockHash: $prevHashStr\nhash: $hashStr"
+  }
 }
 
 object Block {
@@ -14,4 +20,3 @@ object Block {
     Block(timestamp, data, prevHashBlock, hash)
   }
 }
-
