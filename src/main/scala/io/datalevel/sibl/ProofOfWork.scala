@@ -29,7 +29,7 @@ class ProofOfWork(val block: Block, val target: BigInt) {
 
 object ProofOfWork {
   def apply(block: Block): ProofOfWork = {
-    val target = BigInt(2)
+    val target = BigInt(1)
     new ProofOfWork(block, target << (256 - targetBits))
   }
 }
