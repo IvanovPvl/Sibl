@@ -10,7 +10,7 @@ final case class Block(timestamp: Instant, data: Array[Byte], prevBlockHash: Arr
     val hashStr     = hash.asHexString
     val prevHashStr = prevBlockHash.asHexString
 
-    s"timestamp: $timeStr\ndata: $data\nprevBlockHash: $prevHashStr\nhash: $hashStr\nnonce: $nonce"
+    s"timestamp: $timeStr\ndata: ${data.utf8String}\nprevBlockHash: $prevHashStr\nhash: $hashStr\nnonce: $nonce"
   }
 }
 

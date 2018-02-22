@@ -13,6 +13,13 @@ class ProofOfWork(val block: Block, val target: BigInt) {
     block.prevBlockHash ++ block.data ++ timeBytes ++ targetBitsBytes ++ nonceBytes
   }
 
+  def validate: Boolean = {
+    val data    = prepare(block.nonce)
+    val hash    = data.hash[SHA256]
+    val hashInt = BigInt(1, hash)
+    hashInt < target
+  }
+
   def run: RunResult = runUtil(BigInt(0), Array.emptyByteArray, 0)
 
   private def runUtil(hashInt: BigInt, hash: Array[Byte], nonce: Long): RunResult = {

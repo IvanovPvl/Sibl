@@ -1,6 +1,7 @@
 package io.datalevel
 
 import java.nio.ByteBuffer
+import java.nio.charset.Charset
 
 package object sibl {
   val targetBits = 22
@@ -15,6 +16,8 @@ package object sibl {
           sb.append(byteToHex(el))
       }.toString
     }
+
+    def utf8String: String = new String(a, Charset.forName("UTF-8"))
   }
 
   implicit class LongOps(val n: Long) {
