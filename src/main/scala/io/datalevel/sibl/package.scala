@@ -1,7 +1,11 @@
 package io.datalevel
 
+import java.nio.ByteBuffer
+
 package object sibl {
-  implicit class ByteArrayImpr(val a: Array[Byte]) {
+  val targetBits = 22
+
+  implicit class ByteArrayOps(val a: Array[Byte]) {
     def asHexString: String = {
       def byteToHex(b: Byte): String = Integer.toHexString(0xFF & b)
       a.foldLeft(StringBuilder.newBuilder) { (sb, el) =>
@@ -11,5 +15,15 @@ package object sibl {
           sb.append(byteToHex(el))
       }.toString
     }
+  }
+
+  implicit class LongOps(val n: Long) {
+    def toByteArray: Array[Byte] = {
+      val bb = ByteBuffer.allocate(java.lang.Long.BYTES)
+      bb.putLong(n)
+      bb.array
+    }
+
+    def toByteArrayOfHexString: Array[Byte] = n.toHexString.getBytes("UTF-8")
   }
 }
