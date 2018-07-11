@@ -4,8 +4,13 @@ import java.time.Instant
 import tsec.messagedigests._
 import tsec.messagedigests.imports.SHA256
 
-final case class Block(timestamp: Instant, data: Array[Byte], prevBlockHash: Array[Byte], hash: Array[Byte], nonce: Long) {
-  override def toString = {
+final case class Block(
+  timestamp: Instant,
+  data: Array[Byte],
+  prevBlockHash: Array[Byte],
+  hash: Array[Byte],
+  nonce: Long) {
+  override def toString: String = {
     val timeStr     = timestamp.toString
     val hashStr     = hash.asHexString
     val prevHashStr = prevBlockHash.asHexString

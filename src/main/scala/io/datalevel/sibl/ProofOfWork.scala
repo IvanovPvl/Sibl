@@ -20,9 +20,9 @@ class ProofOfWork(val block: Block, val target: BigInt) {
     hashInt < target
   }
 
-  def run: RunResult = runUtil(BigInt(0), Array.emptyByteArray, 0)
+  def run: RunResult = runUtil(0)
 
-  private def runUtil(hashInt: BigInt, hash: Array[Byte], nonce: Long): RunResult = {
+  private def runUtil(nonce: Long): RunResult = {
     val data       = prepare(nonce)
     val newHash    = data.hash[SHA256]
     val newHashInt = BigInt(1, newHash)
@@ -30,7 +30,7 @@ class ProofOfWork(val block: Block, val target: BigInt) {
     if (newHashInt < target || nonce == Long.MaxValue)
       RunResult(nonce, newHash)
     else
-      runUtil(newHashInt, newHash, nonce + 1)
+      runUtil(nonce + 1)
   }
 }
 
