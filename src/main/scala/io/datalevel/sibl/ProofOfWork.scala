@@ -3,6 +3,8 @@ package io.datalevel.sibl
 import tsec.messagedigests._
 import tsec.messagedigests.imports.SHA256
 
+import scala.annotation.tailrec
+
 final case class RunResult(nonce: Long, hash: Array[Byte])
 
 class ProofOfWork(val block: Block, val target: BigInt) {
@@ -22,6 +24,7 @@ class ProofOfWork(val block: Block, val target: BigInt) {
 
   def run: RunResult = runUtil(0)
 
+  @tailrec
   private def runUtil(nonce: Long): RunResult = {
     val data       = prepare(nonce)
     val newHash    = data.hash[SHA256]
