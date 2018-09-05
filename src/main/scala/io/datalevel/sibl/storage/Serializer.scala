@@ -1,30 +1,28 @@
 package io.datalevel.sibl.storage
 
-import java.io.{ByteArrayInputStream, ByteArrayOutputStream}
-
-import com.sksamuel.avro4s._
+import java.io.{ByteArrayInputStream, ByteArrayOutputStream, ObjectInputStream, ObjectOutputStream}
 
 import io.datalevel.sibl.loan
 
 sealed trait Serializer[A] {
   def toBinary(data: A): Array[Byte]
-  def fromBinary(buffer: Array[Byte]): A
+  def fromBinary(bytes: Array[Byte]): A
 }
 
-class AvroSerializer[A : SchemaFor : ToRecord : FromRecord] extends Serializer[A] {
+class DefaultSerializer[A] extends Serializer[A] {
   def toBinary(data: A): Array[Byte] = {
-    loan(new ByteArrayOutputStream()) { baos =>
-      loan(AvroOutputStream.binary[A](baos)) { output =>
-        output.write(data)
-        baos.toByteArray
+    loan(new ByteArrayOutputStream()) { stream =>
+      loan(new ObjectOutputStream(stream)) { oos =>
+        oos.writeObject(data)
+        stream.toByteArray
       }
     }
   }
 
-  def fromBinary(buffer: Array[Byte]): A = {
-    loan(new ByteArrayInputStream(buffer)) { in =>
-      loan(AvroInputStream.binary[A](in)) { input =>
-        input.iterator.next()
+  def fromBinary(bytes: Array[Byte]): A = {
+    loan(new ByteArrayInputStream(bytes)) { stream =>
+      loan(new ObjectInputStream(stream)) { ois =>
+        ois.readObject.asInstanceOf[A]
       }
     }
   }
